@@ -17,9 +17,10 @@ const api = "https://api.telegram.org/"
 type Method string
 
 const (
-	GetMe       = "GetMe"
-	SetWebhook  = "SetWebhook"
-	SendMessage = "SendMessage"
+	GetMe             = "GetMe"
+	SetWebhook        = "SetWebhook"
+	SendMessage       = "SendMessage"
+	AnswerInlineQuery = "AnswerInlineQuery"
 )
 
 type HttpClient interface {
@@ -67,6 +68,10 @@ func New(token string) (*Bot, error) {
 	return b, nil
 }
 
+func (b *Bot) Id() int64 {
+	return b.id
+}
+
 func (b *Bot) Updates() <-chan *model.Update {
 	return b.updates
 }
@@ -105,4 +110,16 @@ func (b *Bot) SendMessageContext(ctx context.Context, params SendMessageParams) 
 		return nil, fmt.Errorf("%s: %w", SendMessage, err)
 	}
 	return message, nil
+}
+
+func (b *Bot) AnswerInlineQuery(params AnswerInlineQueryParams) (bool, error) {
+	return b.AnswerInlineQueryContext(context.Background(), params)
+}
+
+func (b *Bot) AnswerInlineQueryContext(ctx context.Context, params AnswerInlineQueryParams) (bool, error) {
+	var ok bool
+	if err := b.doRequest(ctx, AnswerInlineQuery, &ok, params); err != nil {
+		return false, fmt.Errorf("%s: %w", AnswerInlineQuery, err)
+	}
+	return ok, nil
 }

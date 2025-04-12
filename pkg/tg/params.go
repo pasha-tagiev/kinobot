@@ -1,5 +1,7 @@
 package tg
 
+import "kinobot/pkg/tg/model"
+
 type SetWebhookParams struct {
 	Url                string   `json:"url"`
 	MaxConnections     int      `json:"max_connections,omitempty"`
@@ -8,15 +10,15 @@ type SetWebhookParams struct {
 	SecretToken        string   `json:"secret_token,omitempty"`
 }
 
-type ParseMode string
-
-const (
-	ParseModeHtml       = "HTML"
-	ParseModeMarkdownV2 = "MarkdownV2"
-)
-
 type SendMessageParams struct {
-	ChatId    int64     `json:"chat_id"`
-	Text      string    `json:"text"`
-	ParseMode ParseMode `json:"parse_mode,omitempty"`
+	ChatId    int64           `json:"chat_id"`
+	Text      string          `json:"text"`
+	ParseMode model.ParseMode `json:"parse_mode,omitempty"`
+}
+
+type AnswerInlineQueryParams struct {
+	Id         string                    `json:"inline_query_id"`
+	Results    []model.InlineQueryResult `json:"results,omitzero"`
+	CacheTime  int                       `json:"cache_time,omitempty"`
+	IsPersonal bool                      `json:"is_personal,omitempty"`
 }

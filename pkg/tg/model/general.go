@@ -1,8 +1,10 @@
 package model
 
 type Update struct {
-	Id      int64    `json:"update_id"`
-	Message *Message `json:"message,omitempty"`
+	Id            int64          `json:"update_id"`
+	Message       *Message       `json:"message,omitempty"`
+	InlineQuery   *InlineQuery   `json:"inline_query,omitempty"`
+	CallbackQuery *CallbackQuery `json:"callback_query,omitempty"`
 }
 
 type Message struct {
@@ -22,6 +24,21 @@ const (
 	ChatTypeSuperGroup = "supergroup"
 	ChatTypeChannel    = "channel"
 )
+
+type InlineQuery struct {
+	Id       string   `json:"id"`
+	From     User     `json:"from"`
+	Query    string   `json:"query"`
+	Offset   string   `json:"offset"`
+	ChatType ChatType `json:"chat_type,omitempty"`
+}
+
+type CallbackQuery struct {
+	Id           string `json:"id"`
+	From         User   `json:"from"`
+	ChatInstance string `json:"chat_instance"`
+	Data         string `json:"data,omitempty"`
+}
 
 type Chat struct {
 	Id   int64    `json:"id"`
