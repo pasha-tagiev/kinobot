@@ -26,7 +26,7 @@ type Wrapper struct {
 	Result json.RawMessage `json:"result"`
 }
 
-func (b *Bot) doRequest(ctx context.Context, method Method, v any, params any) error {
+func (b *Bot) doRequest(ctx context.Context, method Method, params any, data any) error {
 	body, err := json.Marshal(params)
 	if err != nil {
 		return err
@@ -54,11 +54,10 @@ func (b *Bot) doRequest(ctx context.Context, method Method, v any, params any) e
 		if wrapper.ResponseError != nil {
 			return wrapper.ResponseError
 		}
-
 		return ErrUnexpectedEntity
 	}
 
-	if err := json.Unmarshal(wrapper.Result, v); err != nil {
+	if err := json.Unmarshal(wrapper.Result, data); err != nil {
 		return err
 	}
 

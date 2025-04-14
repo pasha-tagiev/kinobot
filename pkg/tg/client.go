@@ -82,7 +82,7 @@ func (b *Bot) GetMe() (*model.User, error) {
 
 func (b *Bot) GetMeContext(ctx context.Context) (*model.User, error) {
 	var user *model.User
-	if err := b.doRequest(ctx, GetMe, &user, nil); err != nil {
+	if err := b.doRequest(ctx, GetMe, nil, &user); err != nil {
 		return nil, fmt.Errorf("%s: %w", GetMe, err)
 	}
 	return user, nil
@@ -94,7 +94,7 @@ func (b *Bot) SetWebhook(params SetWebhookParams) (bool, error) {
 
 func (b *Bot) SetWebhookContext(ctx context.Context, params SetWebhookParams) (bool, error) {
 	var ok bool
-	if err := b.doRequest(ctx, SetWebhook, &ok, params); err != nil {
+	if err := b.doRequest(ctx, SetWebhook, params, &ok); err != nil {
 		return false, fmt.Errorf("%s: %w", SetWebhook, err)
 	}
 	return ok, nil
@@ -106,7 +106,7 @@ func (b *Bot) SendMessage(params SendMessageParams) (*model.Message, error) {
 
 func (b *Bot) SendMessageContext(ctx context.Context, params SendMessageParams) (*model.Message, error) {
 	var message *model.Message
-	if err := b.doRequest(ctx, SendMessage, &message, params); err != nil {
+	if err := b.doRequest(ctx, SendMessage, params, &message); err != nil {
 		return nil, fmt.Errorf("%s: %w", SendMessage, err)
 	}
 	return message, nil
@@ -118,7 +118,7 @@ func (b *Bot) AnswerInlineQuery(params AnswerInlineQueryParams) (bool, error) {
 
 func (b *Bot) AnswerInlineQueryContext(ctx context.Context, params AnswerInlineQueryParams) (bool, error) {
 	var ok bool
-	if err := b.doRequest(ctx, AnswerInlineQuery, &ok, params); err != nil {
+	if err := b.doRequest(ctx, AnswerInlineQuery, params, &ok); err != nil {
 		return false, fmt.Errorf("%s: %w", AnswerInlineQuery, err)
 	}
 	return ok, nil
