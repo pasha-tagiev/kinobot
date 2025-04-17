@@ -19,10 +19,10 @@ type Message struct {
 type ChatType string
 
 const (
-	ChatTypePrivate    = "private"
-	ChatTypeGroup      = "group"
-	ChatTypeSuperGroup = "supergroup"
-	ChatTypeChannel    = "channel"
+	ChatTypePrivate    ChatType = "private"
+	ChatTypeGroup      ChatType = "group"
+	ChatTypeSuperGroup ChatType = "supergroup"
+	ChatTypeChannel    ChatType = "channel"
 )
 
 type InlineQuery struct {

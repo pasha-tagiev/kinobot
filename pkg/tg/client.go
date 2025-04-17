@@ -27,7 +27,7 @@ type HttpClient interface {
 	Do(*http.Request) (*http.Response, error)
 }
 
-type Bot struct {
+type BotClient struct {
 	id      int64
 	base    string
 	httpc   HttpClient
@@ -52,73 +52,73 @@ func makeBase(token string) string {
 	return api + "bot" + token + "/"
 }
 
-func New(token string) (*Bot, error) {
+func NewBotClient(token string) (*BotClient, error) {
 	id, err := parseId(token)
 	if err != nil {
 		return nil, err
 	}
 
-	b := &Bot{
+	bc := &BotClient{
 		id:      id,
 		base:    makeBase(token),
 		httpc:   new(http.Client),
 		updates: make(chan *model.Update),
 	}
 
-	return b, nil
+	return bc, nil
 }
 
-func (b *Bot) Id() int64 {
-	return b.id
+func (bc *BotClient) Id() int64 {
+	return bc.id
 }
 
-func (b *Bot) Updates() <-chan *model.Update {
-	return b.updates
+func (bc *BotClient) Updates() <-chan *model.Update {
+	return bc.updates
 }
 
-func (b *Bot) GetMe() (*model.User, error) {
-	return b.GetMeContext(context.Background())
+func (bc *BotClient) GetMe() (*model.User, error) {
+	return bc.GetMeContext(context.Background())
 }
 
-func (b *Bot) GetMeContext(ctx context.Context) (*model.User, error) {
+func (bc *BotClient) GetMeContext(ctx context.Context) (*model.User, error) {
 	var user *model.User
-	if err := b.doRequest(ctx, GetMe, nil, &user); err != nil {
+	if err := bc.doRequest(ctx, GetMe, nil, &user); err != nil {
 		return nil, fmt.Errorf("%s: %w", GetMe, err)
 	}
 	return user, nil
 }
 
-func (b *Bot) SetWebhook(params SetWebhookParams) (bool, error) {
-	return b.SetWebhookContext(context.Background(), params)
+func (bc *BotClient) SetWebhook(params SetWebhookParams) (bool, error) {
+	return bc.SetWebhookContext(context.Background(), params)
 }
 
-func (b *Bot) SetWebhookContext(ctx context.Context, params SetWebhookParams) (bool, error) {
+func (bc *BotClient) SetWebhookContext(ctx context.Context, params SetWebhookParams) (bool, error) {
 	var ok bool
-	if err := b.doRequest(ctx, SetWebhook, params, &ok); err != nil {
+	if err := bc.doRequest(ctx, SetWebhook, params, &ok); err != nil {
 		return false, fmt.Errorf("%s: %w", SetWebhook, err)
 	}
 	return ok, nil
 }
 
-func (b *Bot) SendMessage(params SendMessageParams) (*model.Message, error) {
-	return b.SendMessageContext(context.Background(), params)
+func (bc *BotClient) SendMessage(params SendMessageParams) (*model.Message, error) {
+	return bc.SendMessageContext(context.Background(), params)
 }
 
-func (b *Bot) SendMessageContext(ctx context.Context, params SendMessageParams) (*model.Message, error) {
+func (bc *BotClient) SendMessageContext(ctx context.Context, params SendMessageParams) (*model.Message, error) {
 	var message *model.Message
-	if err := b.doRequest(ctx, SendMessage, params, &message); err != nil {
+	if err := bc.doRequest(ctx, SendMessage, params, &message); err != nil {
 		return nil, fmt.Errorf("%s: %w", SendMessage, err)
 	}
 	return message, nil
 }
 
-func (b *Bot) AnswerInlineQuery(params AnswerInlineQueryParams) (bool, error) {
-	return b.AnswerInlineQueryContext(context.Background(), params)
+func (bc *BotClient) AnswerInlineQuery(params AnswerInlineQueryParams) (bool, error) {
+	return bc.AnswerInlineQueryContext(context.Background(), params)
 }
 
-func (b *Bot) AnswerInlineQueryContext(ctx context.Context, params AnswerInlineQueryParams) (bool, error) {
+func (bc *BotClient) AnswerInlineQueryContext(ctx context.Context, params AnswerInlineQueryParams) (bool, error) {
 	var ok bool
-	if err := b.doRequest(ctx, AnswerInlineQuery, params, &ok); err != nil {
+	if err := bc.doRequest(ctx, AnswerInlineQuery, params, &ok); err != nil {
 		return false, fmt.Errorf("%s: %w", AnswerInlineQuery, err)
 	}
 	return ok, nil

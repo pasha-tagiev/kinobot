@@ -26,20 +26,20 @@ type Wrapper struct {
 	Result json.RawMessage `json:"result"`
 }
 
-func (b *Bot) doRequest(ctx context.Context, method Method, params any, data any) error {
+func (bc *BotClient) doRequest(ctx context.Context, method Method, params any, data any) error {
 	body, err := json.Marshal(params)
 	if err != nil {
 		return err
 	}
 
-	endpoint := b.base + string(method)
+	endpoint := bc.base + string(method)
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, endpoint, bytes.NewReader(body))
 	if err != nil {
 		return err
 	}
 	req.Header.Set("Content-Type", "application/json")
 
-	resp, err := b.httpc.Do(req)
+	resp, err := bc.httpc.Do(req)
 	if err != nil {
 		return err
 	}

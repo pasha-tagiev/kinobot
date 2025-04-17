@@ -66,14 +66,14 @@ func (wh *WebhookHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func (b *Bot) WebhookHandler(ctx context.Context, secretToken string) http.Handler {
+func (bc *BotClient) WebhookHandler(ctx context.Context, secretToken string) http.Handler {
 	wh := &WebhookHandler{
 		secretToken: secretToken,
 		updates:     make(chan *model.Update),
 		done:        make(chan struct{}),
 	}
 
-	go wh.forwardUpdates(ctx, b.updates)
+	go wh.forwardUpdates(ctx, bc.updates)
 
 	return wh
 }
