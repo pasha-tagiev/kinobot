@@ -22,8 +22,8 @@ type (
 type ParseMode string
 
 const (
-	ParseModeHtml       = "HTML"
-	ParseModeMarkdownV2 = "MarkdownV2"
+	ParseModeHtml       ParseMode = "HTML"
+	ParseModeMarkdownV2 ParseMode = "MarkdownV2"
 )
 
 type (
