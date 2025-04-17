@@ -10,9 +10,9 @@ type Page struct {
 type MediaType string
 
 const (
-	MediaTypeTv     = "tv"
-	MediaTypeMovie  = "movie"
-	MediaTypePerson = "person"
+	MediaTypeTv     MediaType = "tv"
+	MediaTypeMovie  MediaType = "movie"
+	MediaTypePerson MediaType = "person"
 )
 
 type ImagePath string

@@ -11,7 +11,7 @@ import (
 type MediaSeq = iter.Seq2[*model.Media, error]
 
 type MediaStream struct {
-	tmdb   *Tmdb
+	tmdbc  *TmdbClient
 	path   Path
 	values url.Values
 }
@@ -26,7 +26,7 @@ func (ms *MediaStream) AllContext(ctx context.Context) MediaSeq {
 			ms.values.Set("page", strconv.Itoa(i))
 
 			var page model.Page
-			if err := ms.tmdb.doRequest(ctx, ms.path, ms.values, &page); err != nil {
+			if err := ms.tmdbc.doRequest(ctx, ms.path, ms.values, &page); err != nil {
 				yield(nil, err)
 				return
 			}

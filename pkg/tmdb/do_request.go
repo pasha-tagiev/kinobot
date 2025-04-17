@@ -18,7 +18,7 @@ func (re *ResponseError) Error() string {
 	return fmt.Sprintf("tmdb api [%d]: %s", re.StatusCode, re.StatusMessage)
 }
 
-func (tmdb *Tmdb) doRequest(ctx context.Context, path Path, params url.Values, data any) error {
+func (tmdbc *TmdbClient) doRequest(ctx context.Context, path Path, params url.Values, data any) error {
 	endpoint := api + string(path)
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
@@ -27,7 +27,7 @@ func (tmdb *Tmdb) doRequest(ctx context.Context, path Path, params url.Values, d
 	req.URL.RawQuery = params.Encode()
 	req.Header.Set("Accept", "application/json")
 
-	resp, err := tmdb.httpc.Do(req)
+	resp, err := tmdbc.httpc.Do(req)
 	if err != nil {
 		return err
 	}

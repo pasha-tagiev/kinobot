@@ -21,44 +21,44 @@ type HttpClient interface {
 	Do(*http.Request) (*http.Response, error)
 }
 
-type Tmdb struct {
+type TmdbClient struct {
 	apiKey string
 	httpc  HttpClient
 }
 
-func New(apiKey string, httpc HttpClient) *Tmdb {
-	return &Tmdb{
+func NewTmdbClient(apiKey string, httpc HttpClient) *TmdbClient {
+	return &TmdbClient{
 		apiKey: apiKey,
 		httpc:  httpc,
 	}
 }
 
-func (tmdb *Tmdb) makeValues(params any) url.Values {
+func (tmdbc *TmdbClient) makeValues(params any) url.Values {
 	values, _ := query.Values(params)
-	values.Set("api_key", tmdb.apiKey)
+	values.Set("api_key", tmdbc.apiKey)
 	return values
 }
 
-func (tmdb *Tmdb) SearchMulti(params SearchMultiParams) *MediaStream {
+func (tmdbc *TmdbClient) SearchMulti(params SearchMultiParams) *MediaStream {
 	return &MediaStream{
-		tmdb:   tmdb,
+		tmdbc:  tmdbc,
 		path:   SearchMulti,
-		values: tmdb.makeValues(params),
+		values: tmdbc.makeValues(params),
 	}
 }
 
-func (tmdb *Tmdb) TvTopRated(params TvTopRatedParams) *MediaStream {
+func (tmdbc *TmdbClient) TvTopRated(params TvTopRatedParams) *MediaStream {
 	return &MediaStream{
-		tmdb:   tmdb,
+		tmdbc:  tmdbc,
 		path:   TvTopRated,
-		values: tmdb.makeValues(params),
+		values: tmdbc.makeValues(params),
 	}
 }
 
-func (tmdb *Tmdb) MovieTopRated(params MovieTopRatedParams) *MediaStream {
+func (tmdbc *TmdbClient) MovieTopRated(params MovieTopRatedParams) *MediaStream {
 	return &MediaStream{
-		tmdb:   tmdb,
+		tmdbc:  tmdbc,
 		path:   MovieTopRated,
-		values: tmdb.makeValues(params),
+		values: tmdbc.makeValues(params),
 	}
 }
