@@ -1,8 +1,12 @@
 package tmdb
 
 import (
+	"context"
+	"kinobot/pkg/tmdb/model"
 	"net/http"
 	"net/url"
+	"strconv"
+	"strings"
 
 	"github.com/google/go-querystring/query"
 )
@@ -15,6 +19,8 @@ const (
 	SearchMulti   Path = "search/multi"
 	TvTopRated    Path = "tv/top_rated"
 	MovieTopRated Path = "movie/top_rated"
+	TvDetails     Path = "tv/{series_id}"
+	MovieDetails  Path = "movie/{movie_id}"
 )
 
 type HttpClient interface {
@@ -61,4 +67,53 @@ func (tmdbc *TmdbClient) MovieTopRated(params MovieTopRatedParams) *MediaStream 
 		path:   MovieTopRated,
 		values: tmdbc.makeValues(params),
 	}
+}
+
+func applyPathParams(path Path, params ...string) Path {
+	builder := strings.Builder{}
+	builder.Grow(len(path))
+
+	p := string(path)
+	for _, param := range params {
+		i := strings.IndexRune(p, '{')
+		j := strings.IndexRune(p, '}')
+
+		builder.WriteString(p[:i])
+		builder.WriteString(param)
+
+		p = p[j+1:]
+	}
+	builder.WriteString(p)
+
+	return Path(builder.String())
+}
+
+func (tmdbc *TmdbClient) TvDetails(id int, params TvDetailsParams) (*model.Media, error) {
+	return tmdbc.TvDetailsContext(context.Background(), id, params)
+}
+
+func (tmdbc *TmdbClient) TvDetailsContext(ctx context.Context, id int, params TvDetailsParams) (*model.Media, error) {
+	path := applyPathParams(TvDetails, strconv.Itoa(id))
+
+	var media *model.Media
+	if err := tmdbc.doRequest(ctx, path, tmdbc.makeValues(params), &media); err != nil {
+		return nil, err
+	}
+
+	return media, nil
+}
+
+func (tmdbc *TmdbClient) MovieDetails(id int, params MovieDetailsParams) (*model.Media, error) {
+	return tmdbc.MovieDetailsContext(context.Background(), id, params)
+}
+
+func (tmdbc *TmdbClient) MovieDetailsContext(ctx context.Context, id int, params MovieDetailsParams) (*model.Media, error) {
+	path := applyPathParams(MovieDetails, strconv.Itoa(id))
+
+	var media *model.Media
+	if err := tmdbc.doRequest(ctx, path, tmdbc.makeValues(params), &media); err != nil {
+		return nil, err
+	}
+
+	return media, nil
 }

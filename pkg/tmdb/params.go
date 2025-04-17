@@ -14,3 +14,11 @@ type MovieTopRatedParams struct {
 	Language string `url:"language"`
 	Region   string `url:"region"`
 }
+
+type TvDetailsParams struct {
+	Language string `url:"language"`
+}
+
+type MovieDetailsParams struct {
+	Language string `url:"language"`
+}
