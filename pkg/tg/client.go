@@ -18,7 +18,9 @@ type Method string
 
 const (
 	GetMe             = "GetMe"
+	GetUpdates        = "GetUpdates"
 	SetWebhook        = "SetWebhook"
+	DeleteWebhook     = "DeleteWebhook"
 	SendMessage       = "SendMessage"
 	AnswerInlineQuery = "AnswerInlineQuery"
 )
@@ -88,6 +90,18 @@ func (bc *BotClient) GetMeContext(ctx context.Context) (*model.User, error) {
 	return user, nil
 }
 
+func (bc *BotClient) GetUpdates(params GetUpdatesParams) (model.Updates, error) {
+	return bc.GetUpdatesContext(context.Background(), params)
+}
+
+func (bc *BotClient) GetUpdatesContext(ctx context.Context, params GetUpdatesParams) (model.Updates, error) {
+	var updates model.Updates
+	if err := bc.doRequest(ctx, GetUpdates, params, &updates); err != nil {
+		return nil, fmt.Errorf("%s: %w", GetUpdates, err)
+	}
+	return updates, nil
+}
+
 func (bc *BotClient) SetWebhook(params SetWebhookParams) (bool, error) {
 	return bc.SetWebhookContext(context.Background(), params)
 }
@@ -96,6 +110,18 @@ func (bc *BotClient) SetWebhookContext(ctx context.Context, params SetWebhookPar
 	var ok bool
 	if err := bc.doRequest(ctx, SetWebhook, params, &ok); err != nil {
 		return false, fmt.Errorf("%s: %w", SetWebhook, err)
+	}
+	return ok, nil
+}
+
+func (bc *BotClient) DeleteWebhook() (bool, error) {
+	return bc.DeleteWebhookContext(context.Background())
+}
+
+func (bc *BotClient) DeleteWebhookContext(ctx context.Context) (bool, error) {
+	var ok bool
+	if err := bc.doRequest(ctx, DeleteWebhook, nil, &ok); err != nil {
+		return false, fmt.Errorf("%s: %w", DeleteWebhook, err)
 	}
 	return ok, nil
 }

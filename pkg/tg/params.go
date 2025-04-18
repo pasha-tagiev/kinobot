@@ -2,12 +2,23 @@ package tg
 
 import "kinobot/pkg/tg/model"
 
+type GetUpdatesParams struct {
+	Offset         int64    `json:"offset,omitempty"`
+	Limit          int      `json:"limit,omitempty"`
+	Timeout        int      `json:"timeout,omitempty"`
+	AllowedUpdates []string `json:"allowed_updates,omitempty"`
+}
+
 type SetWebhookParams struct {
 	Url                string   `json:"url"`
 	MaxConnections     int      `json:"max_connections,omitempty"`
 	AllowedUpdates     []string `json:"allowed_updates,omitempty"`
 	DropPendingUpdates bool     `json:"drop_pending_updates,omitempty"`
 	SecretToken        string   `json:"secret_token,omitempty"`
+}
+
+type DeleteWebhookParams struct {
+	DropPendingUpdates bool `json:"drop_pending_updates,omitempty"`
 }
 
 type SendMessageParams struct {
