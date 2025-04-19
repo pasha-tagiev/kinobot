@@ -114,13 +114,13 @@ func (bc *BotClient) SetWebhookContext(ctx context.Context, params SetWebhookPar
 	return ok, nil
 }
 
-func (bc *BotClient) DeleteWebhook() (bool, error) {
-	return bc.DeleteWebhookContext(context.Background())
+func (bc *BotClient) DeleteWebhook(params DeleteWebhookParams) (bool, error) {
+	return bc.DeleteWebhookContext(context.Background(), params)
 }
 
-func (bc *BotClient) DeleteWebhookContext(ctx context.Context) (bool, error) {
+func (bc *BotClient) DeleteWebhookContext(ctx context.Context, params DeleteWebhookParams) (bool, error) {
 	var ok bool
-	if err := bc.doRequest(ctx, DeleteWebhook, nil, &ok); err != nil {
+	if err := bc.doRequest(ctx, DeleteWebhook, params, &ok); err != nil {
 		return false, fmt.Errorf("%s: %w", DeleteWebhook, err)
 	}
 	return ok, nil
